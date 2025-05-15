@@ -6,10 +6,15 @@ Dieses Python-Projekt ermöglicht es dir, Einkäufe mit Bruttobetrag zu erfassen
 
 ## Projektstruktur
 ├── product.py # Klasse zur Repräsentation eines Produkts
+
 ├── excelManager.py # Klasse zum Schreiben in die Excel-Datei
+
 ├── inputManager.py # Klasse für Benutzereingabe
+
 ├── main.py # Hauptprogramm
+
 └── test.xlsx # Automatisch erstellte Excel-Tabelle mit Einträgen
+
 
 ---
 
