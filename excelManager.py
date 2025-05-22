@@ -1,5 +1,7 @@
+from fontTools.t1Lib import write
 from openpyxl import Workbook, load_workbook
 import os
+import csv
 from product import Product
 
 class ExcelManager:
@@ -13,7 +15,7 @@ class ExcelManager:
             wb = Workbook()
             ws = wb.active
             ws.title = self.sheet_name
-            ws.append(["Datum", "Produktname", "Brutto Beitrag (€)", "MwSt (€)", "Netto Beitrag (€)"])
+            ws.append(["Datum", "Produktname", "Menge", "Preis pro Stk (€)", "Rabatt (%)", "Gesamt (€)", "MwSt (%)", "MwSt (€)", "Netto(€)"])
             wb.save(self.filename)
 
     def save_entry(self, product: Product):
@@ -21,4 +23,13 @@ class ExcelManager:
         ws = wb[self.sheet_name]
         ws.append(product.file_list())
         wb.save(self.filename)
-        print("Betrag wurde gespeichert!")
+        print("In Excel gespeichert!")
+
+    def save_csv(self, product: Product, csv_filename: str = "output.csv"):
+        write_header = not os.path.exists(csv_filename)
+        with open(csv_filename, mode="a", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            if write_header:
+                writer.writerow(["Datum", "Produktname", "Menge", "Einzelpreis (€)", "Rabatt (%)", "Brutto (€)", "MwSt (€)", "Netto (€)"])
+            writer.writerow(product.file_list())
+        print("In CSV gespeichert.")
