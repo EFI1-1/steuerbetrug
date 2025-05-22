@@ -6,7 +6,9 @@ class InputManager:
         name = input("Produktname: ")
         while True:
             try:
-                brutto = float(input("Betrag in Euro (brutto): "))
+                preis = input("Betrag in Euro (brutto): ")
+                preiswithoutkomma = preis.replace(",", ".")
+                brutto = float(preiswithoutkomma)
                 break
             except ValueError:
                 print("Ungültiger Betrag. Bitte gib eine Zahl ein.")
