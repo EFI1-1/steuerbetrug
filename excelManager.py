@@ -1,4 +1,3 @@
-from fontTools.t1Lib import write
 from openpyxl import Workbook, load_workbook
 import os
 import csv

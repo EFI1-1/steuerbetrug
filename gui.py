@@ -3,9 +3,12 @@ from tkinter import messagebox
 from tkinter import ttk
 from product import Product
 from excelManager import ExcelManager
+from sqliteManager import SQLiteManager
 
 class ProduktApp:
     def __init__(self, root):
+        self.sql_manager = SQLiteManager()
+
         self.root = root
         self.root.title("Produkt-Eingabe")
         self.manager = ExcelManager("produkte.xlsx")
@@ -39,6 +42,39 @@ class ProduktApp:
 
         tk.Button(root, text="Speichern", command=self.save_product).grid(row=6, columnspan=2, pady=10)
 
+        # --- Anzeige-Optionen ---
+        tk.Label(root, text="Von (TT.MM.JJJJ):").grid(row=7, column=0)
+        self.start_entry = tk.Entry(root)
+        self.start_entry.grid(row=7, column=1)
+
+        tk.Label(root, text="Bis (TT.MM.JJJJ):").grid(row=8, column=0)
+        self.end_entry = tk.Entry(root)
+        self.end_entry.grid(row=8, column=1)
+
+        tk.Label(root, text="Produktfilter:").grid(row=9, column=0)
+        self.filter_name = tk.Entry(root)
+        self.filter_name.grid(row=9, column=1)
+
+        tk.Button(root, text="Verkäufe anzeigen", command=self.show_sales).grid(row=10, columnspan=2, pady=10)
+
+        self.sales_text = tk.Text(root, width=80, height=10)
+        self.sales_text.grid(row=11, columnspan=2)
+
+    def show_sales(self):
+        start_date = self.start_entry.get().strip()
+        end_date = self.end_entry.get().strip()
+        name_filter = self.filter_name.get().strip()
+
+        results = self.sql_manager.query_sales(start_date, end_date, name_filter)
+
+        self.sales_text.delete(1.0, tk.END)
+        if not results:
+            self.sales_text.insert(tk.END, "Keine Einträge gefunden.\n")
+        else:
+            for row in results:
+                zeile = f"{row[1]} | {row[0]} | Menge: {row[2]} | Einzel: {row[3]:.2f} € | Rabatt: {row[4]}% | Brutto: {row[5]:.2f} € | MwSt: {row[6]:.2f} € | Netto: {row[7]:.2f} €\n"
+                self.sales_text.insert(tk.END, zeile)
+
     def save_product(self):
         try:
             name = self.name_entry.get()
@@ -48,6 +84,8 @@ class ProduktApp:
             mwst = float(self.mwst_var.get())
 
             product = Product(name, brutto, mwst, menge, rabatt)
+
+            self.sql_manager.insert_sale(product)
 
             if self.save_excel.get():
                 self.manager.save_entry(product)
