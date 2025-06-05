@@ -10,14 +10,14 @@ class SQLiteManager:
     def _create_tables(self):
         self.cursor.execute("""
         CREATE TABLE IF NOT EXISTS produkte (
-            produkt_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            produkt_id INTEGER PRIMARY KEY,
             name TEXT NOT NULL,
             mwst_prozent REAL NOT NULL
         )
         """)
         self.cursor.execute("""
         CREATE TABLE IF NOT EXISTS verkaeufe (
-            verkauf_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            verkauf_id INTEGER PRIMARY KEY,
             produkt_id INTEGER,
             datum TEXT,
             menge INTEGER,
