@@ -10,7 +10,7 @@ class Product:
         self.mwst_rate = mwst
         self.netto = round(self.brutto / (1 + mwst / 100), 2)
         self.mwst = round(self.brutto - self.netto, 2)
-        self.datum = datetime.now().strftime("%d.%m.%Y")
+        self.datum = datetime.now().strftime("%Y-%m-%d")
 
     def file_list(self):
         return [self.datum, self.name, self.menge, self.brutto_einzel, self.rabatt, self.brutto, self.mwst_rate, self.mwst, self.netto]

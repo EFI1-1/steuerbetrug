@@ -4,6 +4,7 @@ from tkinter import ttk
 from product import Product
 from excelManager import ExcelManager
 from sqliteManager import SQLiteManager
+from datetime import datetime
 
 class ProduktApp:
     def __init__(self, root):
@@ -57,23 +58,48 @@ class ProduktApp:
 
         tk.Button(root, text="Verkäufe anzeigen", command=self.show_sales).grid(row=10, columnspan=2, pady=10)
 
-        self.sales_text = tk.Text(root, width=80, height=10)
-        self.sales_text.grid(row=11, columnspan=2)
+        columns = ("Datum", "Produkt", "Menge", "Einzelpreis", "Rabatt", "Brutto", "MwSt", "Netto")
+        self.sales_table = ttk.Treeview(root, columns=columns, show="headings", height=10)
+
+        for col in columns:
+            self.sales_table.heading(col, text=col)
+            self.sales_table.column(col, anchor="center", width=100)
+
+        self.sales_table.grid(row=11, columnspan=2)
 
     def show_sales(self):
-        start_date = self.start_entry.get().strip()
-        end_date = self.end_entry.get().strip()
+        raw_start = self.start_entry.get().strip()
+        raw_end = self.end_entry.get().strip()
         name_filter = self.filter_name.get().strip()
+
+        def convert_date(date_str):
+            try:
+                return datetime.strptime(date_str, "%Y-%m-%d").strftime("%d.%m.%Y")
+            except ValueError:
+                return None
+
+        start_date = convert_date(raw_start) if raw_start else None
+        end_date = convert_date(raw_end) if raw_end else None
 
         results = self.sql_manager.query_sales(start_date, end_date, name_filter)
 
-        self.sales_text.delete(1.0, tk.END)
+        for i in self.sales_table.get_children():
+            self.sales_table.delete(i)
+
         if not results:
-            self.sales_text.insert(tk.END, "Keine Einträge gefunden.\n")
+            self.sales_table.insert("", "end", values=("Keine Einträge gefunden.", "", "", "", "", "", "", ""))
         else:
             for row in results:
-                zeile = f"{row[1]} | {row[0]} | Menge: {row[2]} | Einzel: {row[3]:.2f} € | Rabatt: {row[4]}% | Brutto: {row[5]:.2f} € | MwSt: {row[6]:.2f} € | Netto: {row[7]:.2f} €\n"
-                self.sales_text.insert(tk.END, zeile)
+                self.sales_table.insert("", "end", values=(
+                    row[1],  # Datum
+                    row[0],  # Produktname
+                    row[2],  # Menge
+                    f"{row[3]:.2f} €",
+                    f"{row[4]}%",
+                    f"{row[5]:.2f} €",
+                    f"{row[6]:.2f} €",
+                    f"{row[7]:.2f} €"
+                ))
 
     def save_product(self):
         try:
