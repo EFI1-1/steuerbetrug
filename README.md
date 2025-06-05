@@ -26,8 +26,9 @@ Dieses Python-Projekt ermöglicht es dir, Einkäufe mit Bruttobetrag zu erfassen
 - Automatische Berechnung von:
   - Mehrwertsteuer (standardmäßig 19 %)
   - Nettobetrag
-- Speicherung der Daten in einer Excel-Datei
+- Speicherung der Daten in einer Excel oder CSV-Datei
 - Automatisches Anlegen der Excel-Datei beim ersten Start
+- Speichern der Daten in einer SQLite Datenbank möglich
 
 ---
 
