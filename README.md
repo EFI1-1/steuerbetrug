@@ -11,7 +11,7 @@ Dieses Python-Projekt ermöglicht es dir, Einkäufe mit Bruttobetrag zu erfassen
 
 ├── inputManager.py # Klasse für Benutzereingabe
 
-├── main.py # Hauptprogramm
+├── gui.py # Hauptprogramm
 
 ├── SQLiteManager.py # Sql Query Abfragen
 
