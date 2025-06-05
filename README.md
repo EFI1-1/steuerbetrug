@@ -13,6 +13,8 @@ Dieses Python-Projekt ermöglicht es dir, Einkäufe mit Bruttobetrag zu erfassen
 
 ├── main.py # Hauptprogramm
 
+├── SQLiteManager.py # Sql Query Abfragen
+
 └── test.xlsx # Automatisch erstellte Excel-Tabelle mit Einträgen
 
 
