@@ -39,5 +39,5 @@ Dieses Python-Projekt ermöglicht es dir, Einkäufe mit Bruttobetrag zu erfassen
 
 ```bash
 pip install openpyxl
-pyhton3 gui.py (main file)
+pyhton3 gui.py
 
